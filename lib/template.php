@@ -49,12 +49,14 @@ function title($title = null) {
   }
   return $__title;
 }
-function layout($layout = null) {
+function layout($layout = true) {
   static $__layout = null;
   if ($layout) {
     $__layout = $layout;
-  } else {
+  } elseif ($layout === null) {
     $__layout = config('default_layout');
+  } elseif ($layout === false) {
+    $__layout = false;
   }
   return $__layout;
 }
