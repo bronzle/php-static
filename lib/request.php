@@ -2,7 +2,7 @@
 function normalize_uri($path) {
   return preg_replace('#/+#', '/', $path);
 }
-function request($key = null) {
+function &request($key = null) {
   static $request = null;
   if (!$request) {
     $request = $_SERVER;
@@ -22,7 +22,7 @@ function request($key = null) {
   }
   return $request;
 }
-function env($key, $default = false) {
+function &env($key, $default = false) {
   if (strtoupper($key) === 'ENV') {
     $var = getenv($key);
     if ($var !== false) {
@@ -31,27 +31,27 @@ function env($key, $default = false) {
   }
   return $default;
 }
-function post($key = null, $empty = '') {
+function &post($key = null, $default = '') {
   if (!$key) {
     return $_POST;
   } else {
     if (isset($_POST[$key])) {
       return $_POST[$key];
     }
-    return $empty;
+    return $default;
   }
 }
-function get($key = null, $empty = '') {
+function &get($key = null, $default = '') {
   if (!$key) {
     return $_GET;
   } else {
     if (isset($_GET[$key])) {
       return $_GET[$key];
     }
-    return $empty;
+    return $default;
   }
 }
-function param($key = null, $empty = '') {
+function &param($key = null, $default = '') {
   if (!$key) {
     return array_merge(array(), $_POST, $_GET);
   } else {
@@ -60,6 +60,6 @@ function param($key = null, $empty = '') {
     } elseif (isset($_POST[$key])) {
       return $_POST[$key];
     }
-    return $empty;
+    return $default;
   }
 }
