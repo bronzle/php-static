@@ -1,13 +1,17 @@
 <?php
 function flash($type = null, $message = null) {
-  $flash_msg = config('flash_msg');
+  static $flash_msg = null;
+  if (!$flash_msg) {
+    $flash_msg = config('flash_msg');
+  }
   if ($message === null) {
     if (isset($_SESSION[$flash_msg])) {
       if ($type === null) {
         $ret = array();
         foreach($_SESSION[$flash_msg] as $_type) {
+          $ret[$_type] = array();
           foreach($_SESSION[$flash_msg][$_type] as $msg) {
-            $ret[] = $msg;
+            $ret[$_type] = $msg;
           }
         }
       } elseif (isset($_SESSION[$flash_msg][$type])) {
@@ -28,7 +32,10 @@ function flash($type = null, $message = null) {
   }
 }
 function has_flash($type = null) {
-  $flash_msg = config('flash_msg');
+  static $flash_msg = null;
+  if (!$flash_msg) {
+    $flash_msg = config('flash_msg');
+  }
   if (!isset($_SESSION[$flash_msg])) {
     return false;
   }
@@ -46,7 +53,10 @@ function has_flash($type = null) {
   return false;
 }
 function clear_flash($type = null) {
-  $flash_msg = config('flash_msg');
+  static $flash_msg = null;
+  if (!$flash_msg) {
+    $flash_msg = config('flash_msg');
+  }
   if ($type === null) {
     unset($_SESSION[$flash_msg]);
   } else {
