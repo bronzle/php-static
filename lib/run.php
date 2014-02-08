@@ -1,8 +1,6 @@
 <?php
 function run($env) {
   try {
-    session();
-
     $run_default_page = true;
     if (function_exists('run_controller')) {
       run_controller();
