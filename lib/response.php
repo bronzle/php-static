@@ -12,21 +12,24 @@ function error($code, $exception = null) {
   if (env('ENV') === 'development') {
     echo get_template_contents(__DIR__ . '/templates/developer_error.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code], 'code' => $code));
   } else {
-    if (locate_template('error' . $code, false)) {
-      echo get_template_contents('error' . $code, array('message' => $exception->getMessage()));
-    } else {
-      $error_controller = config('error_controller');
-      if ($error_controller) {
-        if (function_exists('run_controller')) {
-          if (run_controller($error_controller, array($code, $exception), array('error_' . $code, 'error'))) {
-            return;
-          }
+    $show_default_page = true;
+    $error_controller = config('error_controller');
+    if ($error_controller) {
+      if (function_exists('run_controller')) {
+        if (run_controller($error_controller, array($code, $exception), array('error_' . $code, 'error'))) {
+          $show_default_page = !Controller::$__rendered;
         }
       }
-      if (file_exists(__DIR__ . '/templates/missing/' . $code . '.php')) {
-        echo get_template_contents(__DIR__ . '/templates/missing/' . $code . '.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code]));
+    }
+    if ($show_default_page) {
+      if (locate_template('error' . $code, false)) {
+        echo get_template_contents('error' . $code, array('message' => $exception->getMessage()));
       } else {
-        echo get_template_contents(__DIR__ . '/templates/missing/default.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code], 'code' => $code));
+        if (file_exists(__DIR__ . '/templates/missing/' . $code . '.php')) {
+          echo get_template_contents(__DIR__ . '/templates/missing/' . $code . '.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code]));
+        } else {
+          echo get_template_contents(__DIR__ . '/templates/missing/default.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code], 'code' => $code));
+        }
       }
     }
   }
@@ -36,7 +39,7 @@ function redirect($page) {
     if (substr($page, 0, 1) !== '/') {
       $page = '/' . $page;
     }
-    $proto = 'http' . (isset(request('HTTPS')) ? 's' : '') .'://';
+    $proto = 'http' . (request('HTTPS') !== null ? 's' : '') .'://';
     $host = request('HTTP_HOST');
     $root = request('root_dir');
     $page = $proto . $host . $root . $page;
@@ -44,10 +47,10 @@ function redirect($page) {
   header('Location: '. $page);
   exit;
 }
-function session($key = null) {
+function &session($key = null, $value = null) {
   $session_name = config('session_name');
   if ($session_name) {
-    if (!session_id()) {
+    if (session_id()) {
       session_name($session_name);
       $lifetime = max(config('session_lifetime', 0), ini_get('session.gc_maxlifetime'));
       ini_set('session.gc_maxlifetime', $lifetime);
@@ -55,8 +58,8 @@ function session($key = null) {
       session_start();
     }
     if ($key) {
-      if (func_num_args() === 2) {
-        $_SESSION[$key] = func_get_arg(1);
+      if ($value !== null) {
+        $_SESSION[$key] = $value;
       } else {
         return $_SESSION[$key];
       }
@@ -64,5 +67,6 @@ function session($key = null) {
       return session_id();
     }
   }
-  return null;
+  $null = null;
+  return $null;
 }
