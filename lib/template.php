@@ -2,6 +2,13 @@
 function locate_template($template, $partial = true, &$files = array()) {
   list($template, $ext) = array_merge(explode('.', $template, 2), array('php'));
   $ext = ".{$ext}";
+  if ($partial) {
+    $parts = explode('/', $template);
+    $last = array_shift($parts);
+    $last = '_' . $last;
+    $parts[] = $last;
+    $template = implode('/', $parts);
+  }
   if ($partial && $template[0] !== '/') {
     $parts = array(request('root_path'), config('pages_root'), request('uri'), $template);
   } else {
@@ -51,12 +58,15 @@ function title($title = null) {
 }
 function layout($layout = true) {
   static $__layout = null;
-  if ($layout) {
-    $__layout = $layout;
-  } elseif ($layout === null) {
+  if ($__layout === null) {
+    $__layout = config('default_layout');
+  }
+  if ($layout === null) {
     $__layout = config('default_layout');
   } elseif ($layout === false) {
     $__layout = false;
+  } elseif ($layout !== true) {
+    $__layout = $layout;
   }
   return $__layout;
 }
