@@ -10,12 +10,12 @@ function run($env = null) {
       $run_default_page = !Controller::$__rendered;
     }
     if ($run_default_page) {
-      $GLOBALS['__content'] = render(request('uri_name'), array(), false, false);
+      $GLOBALS['__content'] = &render(request('uri_name'), array(), false, false);
     }
 
-    $layout = render(layout(), array(), false, true);
-    if ($layout) {
-      echo $layout;
+    $layout = layout();
+    if ($layout !== false) {
+      echo render($layout, array(), false, true);
     } else {
       echo content();
     }
