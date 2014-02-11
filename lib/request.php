@@ -1,6 +1,13 @@
-  <?php
+<?php
 function normalize_uri($path) {
   return preg_replace('#/+#', '/', $path);
+}
+function normalize_path($path, $cannonical = false) {
+  $path = preg_replace('#/+#', '/', $path);
+  if ($cannonical) {
+    $path = realpath($path);
+  }
+  return $path;
 }
 function &request($key = null) {
   static $request = null;
