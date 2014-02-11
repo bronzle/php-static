@@ -1,5 +1,8 @@
 <?php
-function run($env) {
+function run($env = null) {
+  if ($env === null) {
+    $env = config('env', env('ENV', 'production'));
+  }
   try {
     $run_default_page = true;
     if (function_exists('run_controller')) {
