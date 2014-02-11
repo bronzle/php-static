@@ -22,7 +22,7 @@ function error($code, $exception = null) {
       }
     }
     if ($show_default_page) {
-      if (locate_template('error' . $code, false)) {
+      if (locate_template(config('pages_root') . '/' . config('error_root'), 'error' . $code, false)) {
         echo get_template_contents('error' . $code, array('message' => $exception->getMessage()));
       } else {
         if (file_exists(__DIR__ . '/templates/missing/' . $code . '.php')) {

@@ -1,30 +1,33 @@
 <?php
-function locate_template($template, $partial = true, &$files = array()) {
+
+function locate_template($template_location, $template, $allow_expanding_to_folder = true, $partial = true, &$files = array()) {
   list($template, $ext) = array_merge(explode('.', $template, 2), array('php'));
   $ext = ".{$ext}";
+  if ($template_location[0] !== '/') {
+    $template_location = request('root_path') . '/' . $template_location;
+  }
   if ($partial) {
     $parts = explode('/', $template);
-    $last = array_shift($parts);
+    $last = array_pop($parts);
     $last = '_' . $last;
     $parts[] = $last;
     $template = implode('/', $parts);
   }
   if ($partial && $template[0] !== '/') {
-    $parts = array(request('root_path'), config('pages_root'), request('uri'), $template);
+    $parts = array($template_location, request('uri'), $template);
   } else {
-    $parts = array(request('root_path'), config('pages_root'), $template);
+    $parts = array($template_location, $template);
   }
   $parts = array_filter($parts);
-  $file = implode('/', $parts) . $ext;
+  $file = normalize_path(implode('/', $parts)) . $ext;
   $files[] = $file;
   if (file_exists($file)) {
     return $file;
-  } elseif (!$partial && $template !== 'index') {
+  } elseif ($allow_expanding_to_folder && !$partial && $template !== 'index') {
     $parts[] = 'index';
-    $file = implode('/', $parts) . $ext;
+    $file = normalize_path(implode('/', $parts)) . $ext;
     $files[] = $file;
     if (file_exists($file)) {
-      include($file);exit;
       return $file;
     }
   }
@@ -32,7 +35,7 @@ function locate_template($template, $partial = true, &$files = array()) {
 }
 function &render($template, $__variables = array(), $__partial = true, $__is_layout = null) {
   $__internal = is_bool($__is_layout);
-  $__template = locate_template($template, $__partial, $__should_be_at);
+  $__template = locate_template(config('pages_root'), $template, !$__is_layout, $__partial, $__should_be_at);
   if (!$__template) {
     throw new MissingTemplate(($__internal ? ($__is_layout ? MissingTemplate::LAYOUT : MissingTemplate::CONTENT) :  MissingTemplate::OTHER), $template, $__should_be_at);
   }
