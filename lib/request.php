@@ -16,6 +16,7 @@ function &request($key = null) {
       $request['uri_name'] = 'index';
     }
     $request['uri_parts'] = array_filter(explode('/', $request['uri_name']));
+    $request['phps.root'] = __DIR__;
   }
   if ($key) {
     return $request[$key];
