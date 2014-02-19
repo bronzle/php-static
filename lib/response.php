@@ -4,6 +4,13 @@ function error($code, $exception = null) {
     '404' => 'Not Found',
     '500' => 'Internal Server Error'
   );
+  if (!config('run_request')) {
+    if ($exception) {
+      throw $exception;
+    } else {
+      throw new Exception('Error: ' + $code);
+    }
+  }
   if (!isset($error_code_values[$code])) {
     $error_code_values = json_decode(file_get_contents(__DIR__ . '/data/http_codes.json'), true);
   }
