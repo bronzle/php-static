@@ -52,22 +52,19 @@ function &get_template_contents($__template, $__variables = array()) {
   $__content = ob_get_clean();
   return $__content;
 }
-function title($title = null) {
+function &title($title = null) {
   static $__title = null;
-  if (!$__title && !$title) {
+  if (!$__title && $title) {
     $__title = $title;
+  } elseif (!$title) {
+    $__title = '';
   }
   return $__title;
 }
-function layout($layout = true) {
+function &layout($layout = true) {
   static $__layout = null;
-  if ($__layout === null) {
+  if ($__layout === null && $layout === true || $layout === null) {
     $__layout = config('default_layout');
-  }
-  if ($layout === null) {
-    $__layout = config('default_layout');
-  } elseif ($layout === false) {
-    $__layout = false;
   } elseif ($layout !== true) {
     $__layout = $layout;
   }
