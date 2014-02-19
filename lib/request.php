@@ -13,7 +13,7 @@ function &request($key = null) {
   static $request = null;
   if (!$request) {
     $request = $_SERVER;
-    $root_uri = normalize_uri('/' . str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname(dirname($_SERVER['SCRIPT_FILENAME']))) . '/');
+    $root_uri = normalize_uri('/' . str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', realpath(PHPS_APP_DOC_ROOT)) . '/');
     $request = array_merge($request, array(
       'root_uri' => $root_uri,
       'root_path' => rtrim($_SERVER['DOCUMENT_ROOT'] . $root_uri, '/')
@@ -31,11 +31,9 @@ function &request($key = null) {
   return $request;
 }
 function &env($key, $default = false) {
-  if (strtoupper($key) === 'ENV') {
-    $var = getenv($key);
-    if ($var !== false) {
-      return $var;
-    }
+  $var = getenv(strtoupper($key));
+  if ($var !== false) {
+    return $var;
   }
   return $default;
 }
