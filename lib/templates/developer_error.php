@@ -9,9 +9,11 @@
       color: #444;
       margin: 30px;
     }
-    .container {
+    .wrapper {
       width: 600px;
       margin: 0 auto;
+    }
+    .container {
       border: 1px solid #CCC;
       padding: 25px 15px;
       border-radius: 2px;
@@ -62,29 +64,38 @@
     tr:nth-child(odd) td {
       background: #F0F0F0;
     }
+    .right {
+      font-size: 10px;
+      float: right;
+      color: #777;
+      margin: 5px 5px 0 0;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Error <?= $code ?>:<span><?= $code_reason ?></span></h1>
-    <h3><?= $exception->getMessage(); ?></h3>
-    <section>
-      <span>Possible Locations:</span>
-      <ul>
-        <?php foreach ($exception->locations as $location): ?>
-        <li><?= $location ?></li>
+  <div class="wrapper">
+    <div class="container">
+      <h1>Error <?= $code ?>:<span><?= $code_reason ?></span></h1>
+      <h3><?= $exception->getMessage(); ?></h3>
+      <section>
+        <span>Possible Locations:</span>
+        <ul>
+          <?php foreach ($exception->locations as $location): ?>
+          <li><?= $location ?></li>
+          <?php endforeach; ?>
+        </ul>
+      </section>
+      <section>
+        <h4>Backtrace:</h4>
+        <table>
+          <tr><th>Location</th><th>Function</th></tr>
+        <?php foreach ($exception->getTrace() as $trace): ?>
+          <tr><td><?= $trace['file'] ?>:<?= $trace['line'] ?></td><td><?= $trace['function'] ?>()</td></tr>
         <?php endforeach; ?>
-      </ul>
-    </section>
-    <section>
-      <h4>Backtrace:</h4>
-      <table>
-        <tr><th>Location</th><th>Function</th></tr>
-      <?php foreach ($exception->getTrace() as $trace): ?>
-        <tr><td><?= $trace['file'] ?>:<?= $trace['line'] ?></td><td><?= $trace['function'] ?>()</td></tr>
-      <?php endforeach; ?>
-      </table>
-    </section>
+        </table>
+      </section>
+    </div>
+    <div class="right"><?= microtime(true) - PHPS_START_TIME ?> s</div>
   </div>
 </body>
 </html>
