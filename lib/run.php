@@ -1,7 +1,9 @@
 <?php
 function run($env = null) {
   try {
-    define('PHPS_START_TIME', microtime(true));
+    if (!defined('PHPS_START_TIME')) {
+      define('PHPS_START_TIME', microtime(true));
+    }
     if ($env === null) {
       $env = env('env', 'development');
       putenv("ENV=$env");
