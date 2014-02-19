@@ -1,8 +1,16 @@
 <?php
-function body_classes() {
+function &body_classes() {
   static $_body_classes = array();
   if (func_num_args() > 0) {
-    $_body_classes = func_get_args();
+    $args = func_get_args();
+    if ($args[0] === true && count($args) === 1) {
+      return $_body_classes;
+    } elseif ($args[0] === false) {
+      $_body_classes = array_filter(array_unique(array_slice($args, 1)));
+    } else {
+      $_body_classes = array_filter(array_unique(array_merge($_body_classes, $args)));
+    }
   }
-  return implode(array_filter(array_unique($_body_classes)), ' ');
+  $ret = implode($_body_classes, ' ');
+  return $ret;
 }
