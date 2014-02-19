@@ -2,7 +2,6 @@
 function &config($key = null, $default = null) {
   static $config = null;
   if (!$config) {
-    $config_file = __DIR__ . '/../config.json';
     $config = array(
       'default_layout'      => 'layout',
       'pages_root'          => 'pages',
@@ -13,6 +12,8 @@ function &config($key = null, $default = null) {
       'assets_images'       => 'images',
       'session_name'        => 'session_token',
 
+      'run_request'         => 'true',
+
 /* optional */
       'controller_path'     => 'controllers',
       'default_controller'  => 'default',
@@ -22,6 +23,15 @@ function &config($key = null, $default = null) {
 
       'emails_root'         => 'emails'
     );
+    $config_file = request('root_path') . '/config.json';
+    if (file_exists($config_file)) {
+      $json_data = json_decode(file_get_contents($config_file), true);
+      if ($json_data === null) {
+        throw InvalidConfiguration(MissingConfiguration::READ_ERROR, $config_file);
+      }
+      $config = array_merge($config, (array)$json_data);
+    }
+    $config_file = request('root_path') . '/config-' . env('env') . '.json';
     if (file_exists($config_file)) {
       $json_data = json_decode(file_get_contents($config_file), true);
       if ($json_data === null) {
@@ -76,4 +86,5 @@ function has_config($key, $children = array(), $throw = false) {
       return false;
     }
   }
+  return true;
 }
