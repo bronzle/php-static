@@ -58,17 +58,23 @@ function &config($key = null, $default = null) {
   }
   return $config;
 }
-function has_config($key, $children = array(), $throw = false) {
+function has_config($key) {
   $all = true;
   $missing = null;
-  if (is_bool($children)) {
-    $throw = $children;
-    $children = array();
+  $children = array();
+  $args = func_get_args();
+  if (count($args) > 1) {
+    if (is_bool(end($args))) {
+      $throw = end($args);
+      $children = array_flatten(array_slice($args, 1, -1));
+    } else {
+      $children = array_flatten(array_slice($args, 1));
+    }
   }
   if (config($key) !== null) {
     if (is_array($children)) {
       foreach ($children as $child) {
-        if (!$config("{$key}.{$child}") !== null) {
+        if (config("{$key}.{$child}") === null) {
           $all = false;
           $missing = "{$key}.{$child}";
           break;
