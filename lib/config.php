@@ -49,20 +49,8 @@ function &config($key = null, $default = null) {
     }
   }
   if ($key) {
-    $keys = explode('.', $key);
-    $config_at_level = &$config;
-    $last = end($keys);
-    foreach ($keys as $key) {
-      if (isset($config_at_level[$key])) {
-        if ($key === $last) {
-          return $config_at_level[$key];
-        }
-        $config_at_level = &$config_at_level[$key];
-      } else {
-        break;
-      }
-    }
-    return $default;
+    $value = array_dot_access($config, $key, $default);
+    return $value;
   }
   return $config;
 }
