@@ -1,9 +1,37 @@
 <?php
-function error($code, $exception = null) {
+function get_http_code_value($code) {
+  $code = (string)$code;  
   static $error_code_values = array(
+    '301' => 'Moved Permanently',
+    '302' => 'Found',
     '404' => 'Not Found',
     '500' => 'Internal Server Error'
   );
+  if (!isset($error_code_values[strval($code)])) {
+    $error_code_values = json_decode(file_get_contents(__DIR__ . '/data/http_codes.json'), true);
+  }
+  return $error_code_values[$code];
+}
+// save headers to check them later?
+function set_header($key, $value = null, $code = null) {
+  if (is_numeric($key)) {
+    $code = $key;
+    $key = null;
+  }
+  if ($code !== null) {
+    $error_code_value = get_http_code_value($code);
+    header("HTTP/1.0 {$code} {$error_code_value}", true, $code);
+  }
+  if ($key) {
+    if ($value) {
+      header("{$key}: {$value}", true);
+    } elseif ($key) {
+      header($key, true);
+    }
+  }
+  return isset($error_code_value) ? $error_code_value : null;
+}
+function error($code, $exception = null) {
   if (!config('run_request')) {
     if ($exception) {
       throw $exception;
@@ -11,13 +39,9 @@ function error($code, $exception = null) {
       throw new Exception('Error: ' + $code);
     }
   }
-  if (!isset($error_code_values[$code])) {
-    $error_code_values = json_decode(file_get_contents(__DIR__ . '/data/http_codes.json'), true);
-  }
-  header("HTTP/1.0 {$code} {$error_code_values[$code]}", true, $code);
-
-  if (env('ENV') === 'development') {
-    echo get_template_contents(__DIR__ . '/templates/developer_error.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code], 'code' => $code));
+  $error_code_value = set_header($code);
+  if (env('env') === 'development') {
+    echo get_template_contents(__DIR__ . '/templates/developer_error.php', array('exception' => $exception, 'code_reason' => $error_code_value, 'code' => $code));
   } else {
     $show_default_page = true;
     $error_controller = config('error_controller');
@@ -29,13 +53,13 @@ function error($code, $exception = null) {
       }
     }
     if ($show_default_page) {
-      if (locate_template(config('pages_root') . '/' . config('error_root'), 'error' . $code, false)) {
-        echo get_template_contents('error' . $code, array('message' => $exception->getMessage()));
+      if (($template_path = locate_template(config('pages_root') . '/' . config('error_root'), 'error' . $code, false, false))) {
+        echo get_template_contents($template_path, array('message' => $exception->getMessage()));
       } else {
         if (file_exists(__DIR__ . '/templates/missing/' . $code . '.php')) {
-          echo get_template_contents(__DIR__ . '/templates/missing/' . $code . '.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code]));
+          echo get_template_contents(__DIR__ . '/templates/missing/' . $code . '.php', array('exception' => $exception, 'code_reason' => $error_code_value));
         } else {
-          echo get_template_contents(__DIR__ . '/templates/missing/default.php', array('exception' => $exception, 'code_reason' => $error_code_values[$code], 'code' => $code));
+          echo get_template_contents(__DIR__ . '/templates/missing/default.php', array('exception' => $exception, 'code_reason' => $error_code_value, 'code' => $code));
         }
       }
     }
