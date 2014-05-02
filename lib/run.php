@@ -5,27 +5,28 @@ function run($env = null) {
       define('PHPS_START_TIME', microtime(true));
     }
     if ($env === null) {
-      $env = env('env', 'development');
-      putenv("ENV=$env");
+      $env = array('env' => env('env', 'development'));
+    } elseif (is_string($env)) {
+      $env = array('env' => $env);
+    } elseif (is_array($env)) {
+      $env = array_merge(array('env' => env('env', 'development')), $env);
     }
-    if (!defined('PHPS_APP_DOC_ROOT')) {
-      $doc_root = env('phps_app_doc_root');
-      if ($doc_root) {
-        define('PHPS_APP_DOC_ROOT', realpath($doc_root));
-      } else {
-        $bt = @debug_backtrace();
-        $called_from = dirname($bt[0]['file']);
-        while (true) {
-          $possible_config_files = glob($called_from . '/config{-*,}.json', GLOB_BRACE);
-          if ($possible_config_files !== false && count($possible_config_files)) {
-            define('PHPS_APP_DOC_ROOT', realpath($called_from));
-            break;
-          }
-          if (realpath($called_from) === realpath($_SERVER['DOCUMENT_ROOT'])) {
-            throw new Exception('Application root not found inside document root');
-          }
-          $called_from = dirname($called_from);
+    foreach ($env as $env_key => $env_val) {
+      set_env($env_key, $env_val);
+    }
+    if (!env('phps_app_doc_root')) {
+      $bt = @debug_backtrace();
+      $called_from = dirname($bt[0]['file']);
+      while (true) {
+        $possible_config_files = glob($called_from . '/config{-*,}.json', GLOB_BRACE);
+        if ($possible_config_files !== false && count($possible_config_files)) {
+          set_env('phps_app_doc_root', $called_from);
+          break;
         }
+        if (realpath($called_from) === realpath($_SERVER['DOCUMENT_ROOT'])) {
+          throw new Exception('Application root not found inside document root');
+        }
+        $called_from = dirname($called_from);
       }
     }
     if (config('run_request')) {
