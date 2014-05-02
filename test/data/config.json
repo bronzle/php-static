@@ -1,4 +1,7 @@
 {
   "test_param": "value",
-  "run_request": false
+  "run_request": false,
+  "first": {
+    "second": "third"
+  }
 }

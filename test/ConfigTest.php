@@ -15,4 +15,11 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
   public function testConfigJson() {
     $this->assertEquals('value', config('test_param'));
   }
+  public function testConfigDotAccess() {
+    $this->assertEquals('third', config('first.second'));
+  }
+  public function testDefaultReturnValue() {
+    $this->assertEquals(null, config('non-existant'));
+    $this->assertEquals(true, config('non-existant', true));
+  }
 }
