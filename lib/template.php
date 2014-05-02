@@ -49,7 +49,7 @@ function &render($template, $__variables = array(), $__template_root = null, $__
   return $contents;
 }
 function &get_template_contents($__template, $__variables = array()) {
-  extract($__variables);
+  extract(array_merge(vars(), $__variables));
   ob_start();
   include($__template);
   $__content = ob_get_clean();
@@ -76,4 +76,17 @@ function &layout($layout = true) {
 $__content = '';
 function &content() {
   return $GLOBALS['__content'];
+}
+function vars() {
+  static $_vars = array();
+  if (func_num_args() > 0) {
+    $key = func_get_arg(0);
+    if (func_num_args() === 2) {
+      $_vars[$key] = func_get_arg(1);
+    }
+    if (isset($_vars[$key])) {
+      return $_vars[$key];
+    }
+  }
+  return $_vars;
 }
