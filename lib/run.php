@@ -46,12 +46,12 @@ function run($env = null) {
         }
       }
       if ($run_default_page) {
-        $GLOBALS['__content'] = &render(request('uri_name'), array(), false, false);
+        $GLOBALS['__content'] = &render(ltrim(request('uri_name'), '/'), array(), false, false, false);
       }
 
       $layout = layout();
       if ($layout !== false) {
-        echo render($layout, array(), false, true);
+        echo render($layout, array(), false, false, true);
       } else {
         echo content();
       }
