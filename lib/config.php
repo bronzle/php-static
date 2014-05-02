@@ -14,6 +14,10 @@ function &config($key = null, $default = null) {
 
       'run_request'         => 'true',
 
+      'default_response_headers' => array(
+        'Content-Type' => 'text/html; charset=utf-8'
+      ),
+
 /* optional */
       'controller_path'     => 'controllers',
       'default_controller'  => 'default',

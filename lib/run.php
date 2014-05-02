@@ -29,6 +29,16 @@ function run($env = null) {
         $called_from = dirname($called_from);
       }
     }
+    $default_headers = config('default_response_headers', array());
+    if (count($default_headers) > 0) {
+      foreach ($default_headers as $header => $value) {
+        if (is_int($header)) {
+          $header = $value;
+          $value = null;
+        }
+        set_header($header, $value);
+      }
+    }
     if (config('run_request')) {
       $run_default_page = true;
       if (function_exists('run_controller')) {  // run controller to determine if we render or just send content and exit
