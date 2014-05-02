@@ -4,6 +4,7 @@
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteBase /
   RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
   RewriteRule ^config(-.*)?.json$ lib/application.php/$1 [QSA,L]
   RewriteCond %{REQUEST_FILENAME} !-f
