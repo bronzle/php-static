@@ -25,7 +25,11 @@ function &config($key = null, $default = null) {
 
       'flash_msg'           => 'flash_msg',
 
-      'emails_root'         => 'emails'
+      'emails_root'         => 'emails',
+
+      'redirect'            => array(
+        'extensions'         => array('php', 'html', 'htm')
+      )
     );
     $config_file = request('root_path') . '/config.json';
     if (file_exists($config_file)) {

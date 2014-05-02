@@ -39,6 +39,9 @@ function run($env = null) {
         set_header($header, $value);
       }
     }
+    if (config('redirect.extensions')) {
+      redirect_extension();
+    }
     if (config('run_request')) {
       $run_default_page = true;
       if (function_exists('run_controller')) {  // run controller to determine if we render or just send content and exit
