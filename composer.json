@@ -1,0 +1,17 @@
+{
+  "name": "bronzle/php-static",
+  "version": "v0.0.1",
+  "licence": "MIT",
+  "authors": [
+    {
+      "name": "Byron Bischoff"
+    }
+  ],
+  "autoload": {
+      "files": ["lib/all.php"]
+  },
+  "bin": ["bin/phpstatic"],
+  "require-dev": {
+    "phpunit/phpunit": "4.*"
+  }
+}
