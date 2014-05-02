@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+  stderr="true"
+>
+  <php>
+    <env name="PHPUNIT-BOOTSTRAP-VALUE" value="phpunit-bootstrap-value-env"/>
+    <post name="phpunit-bootstrap-value" value="phpunit-bootstrap-value-post"/>
+    <get name="phpunit-bootstrap-value" value="phpunit-bootstrap-value-get"/>
+    <cookie name="phpunit-bootstrap-value" value="phpunit-bootstrap-value-cookie"/>
+    <!-- <server name="foo" value="bar"/> -->
+  </php>
+  <testsuites>
+    <testsuite name="PHP-Static Tests">
+      <directory suffix="Test.php">test</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
