@@ -57,7 +57,7 @@ function redirect($page) {
 function &session($key = null, $value = null) {
   $session_name = config('session_name');
   if ($session_name) {
-    if (session_id()) {
+    if (!session_id()) {
       session_name($session_name);
       $lifetime = max(config('session_lifetime', 0), ini_get('session.gc_maxlifetime'));
       ini_set('session.gc_maxlifetime', $lifetime);
@@ -66,12 +66,14 @@ function &session($key = null, $value = null) {
     }
     if ($key) {
       if ($value !== null) {
-        $_SESSION[$key] = $value;
+        $_SESSION[$key] = $value; // implment js style hash lookup (like config; maybe extract to look up hash funciton (taking dot separators))
+        return $value;
       } else {
         return $_SESSION[$key];
       }
     } else {
-      return session_id();
+      $session_id = session_id();
+      return $session_id;
     }
   }
   $null = null;
