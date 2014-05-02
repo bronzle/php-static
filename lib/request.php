@@ -48,11 +48,24 @@ function &request($key = null) {
   return $request;
 }
 function &env($key, $default = false) {
-  $var = getenv(strtoupper($key));
+  $key = strtoupper($key);
+  $var = getenv($key);
   if ($var !== false) {
     return $var;
+  } elseif (function_exists('apache_getenv')) {
+    $var = apache_getenv($key);
+    if ($var !== false) {
+      return $var;
+    }
   }
   return $default;
+}
+function set_env($key, $value) {
+  if ($value === false) {
+    putenv(strtoupper($key));
+  } else {
+    putenv(strtoupper($key). '=' . $value);
+  }
 }
 function &post($key = null, $default = '') {
   if (!$key) {
