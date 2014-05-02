@@ -1,9 +1,9 @@
 <?php
 function normalize_uri($path) {
-  return preg_replace(array('#/+#', '#\\\\#'), array('/', '/'), $path);
+  return '/' . trim(preg_replace(array('#/+#', '#\\\\+#'), array('/', '/'), $path), '/');
 }
 function normalize_path($path, $cannonical = false) {
-  $path = preg_replace(array('#[/\\\\]#', '#' . DIRECTORY_SEPARATOR . '+#'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $path);
+  $path = DIRECTORY_SEPARATOR . trim(preg_replace(array('#[/\\\\]+#', '#' . DIRECTORY_SEPARATOR . '+#'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $path), DIRECTORY_SEPARATOR);
   if ($cannonical) {
     $path = realpath($path);
   }
