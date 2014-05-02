@@ -18,21 +18,31 @@ function run_controller($controller = null, $args = array(), $actions = array())
       $actions[] = 'index';
     }
   }
+  $ret = true;
   $controller_path = controller_path($controller);
   if (file_exists($controller_path)) {
     include($controller_path);
     $controller_class = controller_class($controller);
     if (class_exists($controller_class) && is_a($controller_class, 'Controller', true)) {
       $controller_object = new $controller_class;
-      foreach ($actions as $action) {
-        if (method_exists($controller_object, $action)) {
-          call_user_func_array(array($controller_object, $action), $args);
-          return true;
+      if (method_exists($controller_object, '_before')) {
+        $ret = call_user_func_array(array($controller_object, '_before'), $args);
+        $ret = $ret === null ? true : $ret;
+      }
+      if ($ret) {
+        foreach ($actions as $action) {
+          if (method_exists($controller_object, $action)) {
+            $ret = call_user_func_array(array($controller_object, $action), $args);
+            $ret = $ret === null ? true : $ret;
+          }
         }
+      }
+      if (method_exists($controller_object, '_after')) {
+        call_user_func_array(array($controller_object, '_after'), $args);
       }
     }
   }
-  return false;
+  return $ret;
 }
 function controller_path($controller) {
   return request('root_path') . '/' . config('controller_path') . '/' . $controller . '.php';

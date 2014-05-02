@@ -31,9 +31,19 @@ function run($env = null) {
     }
     if (config('run_request')) {
       $run_default_page = true;
-      if (function_exists('run_controller')) {
-        run_controller();
-        $run_default_page = !Controller::$__rendered;
+      if (function_exists('run_controller')) {  // run controller to determine if we render or just send content and exit
+        $GLOBALS['__in_controller'] = true;
+        $ret = run_controller();
+        // if we did call render, skip default page
+        unset($GLOBALS['__in_controller']);
+        if ($ret === true) {
+          $run_default_page = empty($GLOBALS['__content']);
+        } else {
+          if (is_string($ret)) {
+            echo $ret;
+          }
+          exit;
+        }
       }
       if ($run_default_page) {
         $GLOBALS['__content'] = &render(request('uri_name'), array(), false, false);
