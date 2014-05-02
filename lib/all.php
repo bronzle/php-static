@@ -1,25 +1,17 @@
 <?php
-$__FILE_LIST = array(
-  'exceptions',
-  'config',
-  'request',
-  'template',
-  'response',
-
-  'url' => 'optional',
-  'controller' => 'optional',
-  'flash' => 'optional',
-  'body_classes' => 'optional',
-  'email' => 'optional',
-
-  'run'
-);
-foreach ($__FILE_LIST as $__key => $__current_file) {
-  if (!is_numeric($__key)) {
-    $__optional = '/' . $__current_file;
-    $__current_file = $__key;
-  } else {
-    $__optional = '';
-  }
-  require(__DIR__ . "{$__optional}/{$__current_file}.php");
-}
+require(__DIR__ . '/helpers.php');
+require(__DIR__ . '/exceptions.php');
+require(__DIR__ . '/config.php');
+require(__DIR__ . '/request.php');
+require(__DIR__ . '/template.php');
+require(__DIR__ . '/response.php');
+require(__DIR__ . '/optional/url.php');
+require(__DIR__ . '/optional/controller.php');
+require(__DIR__ . '/optional/flash.php');
+require(__DIR__ . '/optional/body_classes.php');
+require(__DIR__ . '/optional/email.php');
+require(__DIR__ . '/optional/redirect.php');
+require(__DIR__ . '/optional/validation.php');
+require(__DIR__ . '/optional/recaptcha.php');
+require(__DIR__ . '/optional/json.php');
+require(__DIR__ . '/run.php');
