@@ -13,17 +13,34 @@ function &request($key = null) {
   static $request = null;
   if (!$request) {
     $request = $_SERVER;
-    $root_uri = normalize_uri('/' . str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', realpath(PHPS_APP_DOC_ROOT)) . '/');
+    $root_uri = normalize_uri(str_replace(realpath($_SERVER['DOCUMENT_ROOT']), '', realpath(env('phps_app_doc_root'))));
     $request = array_merge($request, array(
       'root_uri' => $root_uri,
-      'root_path' => rtrim($_SERVER['DOCUMENT_ROOT'] . $root_uri, '/')
+      'root_path' => normalize_path($_SERVER['DOCUMENT_ROOT'] . $root_uri)
     ));
-    $request['uri'] = $request['uri_name'] = trim(str_replace($request['root_uri'], '', $_SERVER['REQUEST_URI']), " \t\n\r\v\0/\\");
-    if ($request['uri_name'] === '') {
-      $request['uri_name'] = 'index';
+    $parts = explode('?', trim(preg_replace('#^' . $request['root_uri'] . '#i', '', $_SERVER['REQUEST_URI']), " \t\n\r\v\0/\\"), 2);
+    if (count($parts) == 1) {
+      $parts[] = null;
     }
-    $request['uri_parts'] = array_filter(explode('/', $request['uri_name']));
+    list($uri, $query_string) = $parts;
+    $request['uri'] = $request['uri_name'] = '/' . $uri;
+    $request['query_string'] = $query_string;
+    if (isset($_GET['/' . $request['uri']])) {
+      unset($_GET['/' . $request['uri']]);
+    }
+    if ($request['uri_name'] === '/') {
+      $request['uri_name'] = '/index';
+    }
+    $request['uri_parts'] = array_values(array_filter(explode('/', $request['uri_name'])));
+    $last_uri_part = end($request['uri_parts']);
+    if (strpos($last_uri_part, '.') !== false) {
+      list($file, $ext) = explode('.', $last_uri_part);
+      $request['extension'] = $ext;
+    } else {
+      $request['extension'] = null;
+    }
     $request['phps.root'] = __DIR__;
+    $request['xhr'] = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
   }
   if ($key) {
     return $request[$key];
