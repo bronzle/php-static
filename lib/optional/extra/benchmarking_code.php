@@ -14,7 +14,7 @@ function benchmark($name = null) {
   } elseif (!isset($start_time[$name]['end'])) {
     $start_time[$name]['end'] = microtime(true);
     $start_time[$name]['diff'] = $start_time[$name]['end'] - $start_time[$name]['start'];
-    return $diff_time;
+    return $start_time[$name]['diff'];
   }
 }
 
