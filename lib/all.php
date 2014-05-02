@@ -11,4 +11,5 @@ require(__DIR__ . '/optional/flash.php');
 require(__DIR__ . '/optional/body_classes.php');
 require(__DIR__ . '/optional/email.php');
 require(__DIR__ . '/optional/redirect.php');
+require(__DIR__ . '/optional/json.php');
 require(__DIR__ . '/run.php');
