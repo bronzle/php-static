@@ -9,23 +9,23 @@ class LocateTemplateTest extends PHPUnit_Framework_TestCase {
     layout('asdf');
     $l = &layout();
     $l = null;
-    $this->assertEquals($this->template_dir . '/layout.php', locate_template($this->template_dir, layout(), false, false));
+    $this->assertSame($this->template_dir . '/layout.php', locate_template($this->template_dir, layout(), false, false));
     $l = &layout();
     $l = null;
-    $this->assertEquals(null, locate_template($this->template_dir, layout(false), false, false));
+    $this->assertSame(null, locate_template($this->template_dir, layout(false), false, false));
   }
   public function testDefaultLayout() {
-    $this->assertEquals($this->template_dir . '/layout.php', locate_template($this->template_dir, layout(), false, false));
+    $this->assertSame($this->template_dir . '/layout.php', locate_template($this->template_dir, layout(), false, false));
   }
   public function testAlternateLayout() {
-    $this->assertEquals($this->template_dir . '/other_layout.php', locate_template($this->template_dir, layout('other_layout'), false, false));
+    $this->assertSame($this->template_dir . '/other_layout.php', locate_template($this->template_dir, layout('other_layout'), false, false));
   }
   public function testResetLayoutLayout() {
     layout('other_layout');
-    $this->assertEquals($this->template_dir . '/layout.php', locate_template($this->template_dir, layout(null), false, false));
+    $this->assertSame($this->template_dir . '/layout.php', locate_template($this->template_dir, layout(null), false, false));
   }
   public function testNoLayout() {
-    $this->assertEquals(null, locate_template($this->template_dir, layout(false), false, false));
+    $this->assertNull(locate_template($this->template_dir, layout(false), false, false));
   }
   public function testFindTemplateFromUri() {
     $this->markTestIncomplete('Not implmented yet');

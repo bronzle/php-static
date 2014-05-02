@@ -1,7 +1,7 @@
 <?php
 class NormalizeTest extends PHPUnit_Framework_TestCase {
   public function testNormalizeURI() {
-    $this->assertEquals('/a/nice/clean/path', normalize_uri('//a//nice///clean\\path//'));
+    $this->assertSame('/a/nice/clean/path', normalize_uri('//a//nice///clean\\path//'));
   }
   public function testNormalizePath() {
     $path_parts = array('a', 'nice', 'clean', 'path');
@@ -15,9 +15,9 @@ class NormalizeTest extends PHPUnit_Framework_TestCase {
         $dirty .= $separators[mt_rand(0, 1)];
       }
     }
-    $this->assertEquals($clean, normalize_path($dirty));
+    $this->assertSame($clean, normalize_path($dirty));
   }
   public function testNormalizePathCannonical() {
-    $this->assertEquals(implode(DIRECTORY_SEPARATOR, array(__DIR__, 'data', 'dir-real')), normalize_path(implode(DIRECTORY_SEPARATOR, array(__DIR__, 'data', 'dir-fake')), true));
+    $this->assertSame(implode(DIRECTORY_SEPARATOR, array(__DIR__, 'data', 'dir-real')), normalize_path(implode(DIRECTORY_SEPARATOR, array(__DIR__, 'data', 'dir-fake')), true));
   }
 }

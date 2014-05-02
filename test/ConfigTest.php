@@ -13,13 +13,13 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
     $this->assertNotEmpty(config('pages_root'));
   }
   public function testConfigJson() {
-    $this->assertEquals('value', config('test_param'));
+    $this->assertSame('value', config('test_param'));
   }
   public function testConfigDotAccess() {
-    $this->assertEquals('third', config('first.second'));
+    $this->assertSame('third', config('first.second'));
   }
   public function testDefaultReturnValue() {
-    $this->assertEquals(null, config('non-existant'));
-    $this->assertEquals(true, config('non-existant', true));
+    $this->assertNull(config('non-existant'));
+    $this->assertTrue(config('non-existant', true));
   }
 }
