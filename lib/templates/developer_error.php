@@ -77,6 +77,7 @@
     <div class="container">
       <h1>Error <?= $code ?>:<span><?= $code_reason ?></span></h1>
       <h3><?= $exception->getMessage(); ?></h3>
+      <? if ($exception instanceof MissingTemplate): ?>
       <section>
         <span>Possible Locations:</span>
         <ul>
@@ -85,6 +86,7 @@
           <?php endforeach; ?>
         </ul>
       </section>
+      <? endif; ?>
       <section>
         <h4>Backtrace:</h4>
         <table>
