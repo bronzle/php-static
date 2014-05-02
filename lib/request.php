@@ -89,7 +89,8 @@ function &get($key = null, $default = '') {
 }
 function &param($key = null, $default = '') {
   if (!$key) {
-    return array_merge(array(), $_POST, $_GET);
+    $ret = array_merge(array(), $_POST, $_GET);
+    return $ret;
   } else {
     if (isset($_GET[$key])) {
       return $_GET[$key];
