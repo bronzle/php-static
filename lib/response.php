@@ -65,7 +65,19 @@ function error($code, $exception = null) {
     }
   }
 }
-function redirect($page) {
+function redirect($page, $query_string = false, $code = false) {
+  if ($code === false && is_int($query_string)) {
+    $code = $query_string;
+    $query_string = false;
+  }
+  if ($code === false) {
+    $code = 302;
+  }
+  if ($query_string === false || $query_string === null) {
+    $query_string = '';
+  } else {
+    $query_string = '?' . $query_string;
+  }
   if (!preg_match('#^\w+://#', $page)) {
     if (substr($page, 0, 1) !== '/') {
       $page = '/' . $page;
@@ -73,10 +85,12 @@ function redirect($page) {
     $proto = 'http' . (request('HTTPS') !== null ? 's' : '') .'://';
     $host = request('HTTP_HOST');
     $root = request('root_dir');
-    $page = $proto . $host . $root . $page;
+    $page = $proto . $host . $root . $page . $query_string;
   }
-  header('Location: '. $page);
-  exit;
+  set_header('Location', $page, $code);
+  if (config('run_request')) {
+    exit;
+  }
 }
 function &session($key = null, $value = null) {
   $session_name = config('session_name');
