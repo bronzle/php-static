@@ -27,7 +27,7 @@ function &config($key = null, $default = null) {
     if (file_exists($config_file)) {
       $json_data = json_decode(file_get_contents($config_file), true);
       if ($json_data === null) {
-        throw InvalidConfiguration(MissingConfiguration::READ_ERROR, $config_file);
+        throw new InvalidConfiguration(InvalidConfiguration::READ_ERROR, $config_file);
       }
       $config = array_merge($config, (array)$json_data);
     }
@@ -35,7 +35,7 @@ function &config($key = null, $default = null) {
     if (file_exists($config_file)) {
       $json_data = json_decode(file_get_contents($config_file), true);
       if ($json_data === null) {
-        throw InvalidConfiguration(MissingConfiguration::READ_ERROR, $config_file);
+        throw new InvalidConfiguration(InvalidConfiguration::READ_ERROR, $config_file);
       }
       $config = array_merge($config, (array)$json_data);
     }
@@ -81,7 +81,7 @@ function has_config($key, $children = array(), $throw = false) {
   }
   if (!$all) {
     if ($throw) {
-      throw new MissingConfiguration(MissingConfiguration::MISSING_VALUE, $missing);
+      throw new InvalidConfiguration(InvalidConfiguration::MISSING_VALUE, $missing);
     } else {
       return false;
     }

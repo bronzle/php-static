@@ -32,7 +32,7 @@ class InvalidConfiguration extends Exception {
     if ($type === self::READ_ERROR) {
       $message = "Error reading configuration file ({$item}) or configuration file is invalid; {$extra}";
     } elseif ($type === self::MISSING_VALUE) {
-      $message = "A required value is missing from configuration, value: {$item}";
+      $message = "A required value is missing from configuration, key: \"{$item}\"";
     } else {
       $message = 'Unknown error has occurred';
     }
