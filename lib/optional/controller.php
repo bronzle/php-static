@@ -53,7 +53,7 @@ function controller_class($controller) {
 abstract class Controller {
   public static $__rendered = false;
   protected function render($template, $vars = array()) {
-    $GLOBALS['__content'] = render($template, $vars, false, false); // this could return null, which will break things
+    $GLOBALS['__content'] = &render($template, $vars, false, false, false); // this could return null, which will break things
     self::$__rendered = $template;
   }
 }
