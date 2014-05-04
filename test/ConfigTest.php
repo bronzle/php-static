@@ -1,11 +1,6 @@
 <?php
-class ConfigTest extends PHPUnit_Framework_TestCase {
-  public function setUp() {
-    $_SERVER['REQUEST_URI'] = '/';
-    $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '/data';
-    set_env('phps_app_doc_root', $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '/data');
-    run();
-  }
+require_once('include/PHPS_TestCase.php');
+class ConfigTest extends PHPS_TestCase {
   public function testConfigRead() {
     $this->assertNotEmpty(config());
   }

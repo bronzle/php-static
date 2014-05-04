@@ -1,5 +1,6 @@
 <?php
-class HelpersTest extends PHPUnit_Framework_TestCase {
+require_once('include/PHPS_TestCase.php');
+class HelpersTest extends PHPS_TestCase {
   public function setUp() {
     $this->array = array(
       'names' => array(

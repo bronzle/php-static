@@ -1,5 +1,6 @@
 <?php
-class TitleTest extends PHPUnit_Framework_TestCase {
+require_once('include/PHPS_TestCase.php');
+class TitleTest extends PHPS_TestCase {
   public function setUp() {
     $t = &title();
     $t = null;

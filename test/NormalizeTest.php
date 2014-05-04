@@ -1,5 +1,6 @@
 <?php
-class NormalizeTest extends PHPUnit_Framework_TestCase {
+require_once('include/PHPS_TestCase.php');
+class NormalizeTest extends PHPS_TestCase {
   public function testNormalizeURI() {
     $this->assertSame('/a/nice/clean/path', normalize_uri('//a//nice///clean\\path//'));
   }

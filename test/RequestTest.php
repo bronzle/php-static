@@ -1,13 +1,6 @@
 <?php
-class RequestTest extends PHPUnit_Framework_TestCase {
-  public function setUp() {
-    $this->origConfig = &config();
-    $this->setupDefaultRequest();
-  }
-  public function tearDown() {
-    $cfg = &config();
-    $cfg = &$this->origConfig;
-  }
+require_once('include/PHPS_TestCase.php');
+class RequestTest extends PHPS_TestCase {
   public function testUri() {
     $this->setUpRequest(__DIR__ . '/data', __DIR__ . '/data', '/?asd=123');
     $this->assertSame('/', request('root_uri'));
@@ -55,16 +48,5 @@ class RequestTest extends PHPUnit_Framework_TestCase {
     $this->assertSame('phpunit-bootstrap-value-post', post('phpunit-bootstrap-value'));
     $this->assertSame('phpunit-bootstrap-value-get', get('phpunit-bootstrap-value'));
     $this->assertSame('phpunit-bootstrap-value-get', param('phpunit-bootstrap-value'));
-  }
-  private function setupDefaultRequest() {
-    $this->setUpRequest(__DIR__ . '/data', __DIR__ . '/data', '/index/foo/bar?asd=123');
-  }
-  private function setUpRequest($document_root, $app_doc_root, $request_uri) {
-    $_SERVER['DOCUMENT_ROOT'] = $document_root;
-    set_env('phps_app_doc_root', $app_doc_root);
-    $_SERVER['REQUEST_URI'] = $request_uri;
-    $r = &request();
-    $r = null;
-    run();
   }
 }
