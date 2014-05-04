@@ -54,7 +54,8 @@ function error($code, $exception = null) {
     }
     if ($show_default_page) {
       if (($template_path = locate_template(config('pages_root') . '/' . config('error_root'), 'error' . $code, false, false))) {
-        echo get_template_contents($template_path, array('message' => $exception->getMessage()));
+        $GLOBALS['__content'] = &get_template_contents($template_path, array('message' => $exception->getMessage()));
+        echo render(layout(), array(), false, false, true);
       } else {
         if (file_exists(__DIR__ . '/templates/missing/' . $code . '.php')) {
           echo get_template_contents(__DIR__ . '/templates/missing/' . $code . '.php', array('exception' => $exception, 'code_reason' => $error_code_value));
