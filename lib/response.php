@@ -36,7 +36,7 @@ function error($code, $exception = null) {
     if ($exception) {
       throw $exception;
     } else {
-      throw new Exception('Error: ' + $code);
+      throw new Exception('Error: ' . $code);
     }
   }
   $error_code_value = set_header($code);
