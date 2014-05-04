@@ -1,5 +1,6 @@
 <?php
-function normalize_uri($path) {
+function normalize_uri() {
+  $path = implode('/', array_flatten(func_get_args()));
   return '/' . trim(preg_replace(array('#/+#', '#\\\\+#'), array('/', '/'), $path), '/');
 }
 function normalize_path($path, $cannonical = false) {
