@@ -12,7 +12,7 @@ function &config($key = null, $default = null) {
       'assets_images'       => 'images',
       'session_name'        => 'session_token',
 
-      'run_request'         => 'true',
+      'run_request'         => true,
 
       'default_response_headers' => array(
         'Content-Type' => 'text/html; charset=utf-8'
