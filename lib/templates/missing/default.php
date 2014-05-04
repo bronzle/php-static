@@ -24,6 +24,8 @@
       color: #999;
       display: inline-block;
       padding-left: 15px;
+      vertical-align: top;
+      line-height: 37px;
     }
     p {
 

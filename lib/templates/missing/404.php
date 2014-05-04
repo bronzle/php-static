@@ -24,6 +24,8 @@
       color: #999;
       display: inline-block;
       padding-left: 15px;
+      vertical-align: top;
+      line-height: 37px;
     }
     p {
 
@@ -40,7 +42,7 @@
   <div class="container">
     <h1>Page Not Found <span>404</span></h1>
     <p>
-      The request URL "/<?= request('uri') ?>" was not found, apologies.
+      The request URL "<?= request('uri') ?>" was not found, apologies.
     </p>
     <p>
       <a href="<?= request('root_uri') ?>">Return to Home</a>
