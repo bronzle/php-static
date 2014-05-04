@@ -43,11 +43,10 @@ function run($env = null) {
       redirect_extension();
     }
     if (config('run_request')) {
-      $run_default_page = true;
-      if (function_exists('run_controller')) {  // run controller to determine if we render or just send content and exit
+       $run_default_page = true;
+      if (function_exists('run_controller')) {
         $GLOBALS['__in_controller'] = true;
         $ret = run_controller();
-        // if we did call render, skip default page
         unset($GLOBALS['__in_controller']);
         if ($ret === true) {
           $run_default_page = empty($GLOBALS['__content']);
