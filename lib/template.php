@@ -77,16 +77,18 @@ $__content = '';
 function &content() {
   return $GLOBALS['__content'];
 }
-function vars() {
-  static $_vars = array();
-  if (func_num_args() > 0) {
-    $key = func_get_arg(0);
-    if (func_num_args() === 2) {
-      $_vars[$key] = func_get_arg(1);
-    }
-    if (isset($_vars[$key])) {
-      return $_vars[$key];
+function &vars($key = null, $value = null) {
+  static $vars = array();
+  if ($key) {
+    if (is_array($key)) {
+      $vars = array_merge($vars, $key);
+      return true;
+    } else {
+      if ($value !== null) {
+        $vars[$key] = $value;
+      }
+      return $vars[$key];
     }
   }
-  return $_vars;
+  return $vars;
 }

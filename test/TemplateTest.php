@@ -39,4 +39,8 @@ class TemplateTest extends PHPS_TestCase {
   public function testRender() {
     $this->assertSame('index', render('index', array('str' => 'index'), false, false, false));
   }
+  public function testVars() {
+    vars('str', 'index');
+    $this->assertSame('index', render('index', array(), false, false, false));
+  }
 }
